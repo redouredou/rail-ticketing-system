@@ -1,16 +1,12 @@
-package org.example;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package org.example.model;
 
 public class Tap{
-    @JsonProperty("unixTimestamp")
-    int unixTimestamp;
 
-    @JsonProperty("customerId")
-    int customerId;
+    private int unixTimestamp;
 
-    @JsonProperty("station")
-    String station;
+    private int customerId;
+
+    private String station;
 
     public int getUnixTimestamp() {
         return this.unixTimestamp;
@@ -35,4 +31,12 @@ public class Tap{
     public void setStation(String station) {
         this.station = station; }
 
+    @Override
+    public String toString() {
+        return "Tap{" +
+                "unixTimestamp=" + unixTimestamp +
+                ", customerId=" + customerId +
+                ", station='" + station + '\'' +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package org.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.model.Root;
 import org.json.JSONException;
 import java.io.File;
 

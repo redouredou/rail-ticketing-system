@@ -1,13 +1,10 @@
-package org.example;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package org.example.model;
 
 import java.util.List;
 
-public class Root{
+public class Root {
 
-    @JsonProperty("taps")
-    List<Tap> taps;
+    private List<Tap> taps;
 
     public List<Tap> getTaps() {
         return this.taps;
