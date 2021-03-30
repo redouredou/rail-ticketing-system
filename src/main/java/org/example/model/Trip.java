@@ -63,9 +63,6 @@ public class Trip {
         private int zoneTo;
 
         public Builder(String stationStart, String stationEnd, int startedJourneyAt) {
-            if (stationStart == null || stationStart == null) {
-                throw new IllegalArgumentException("TripBuilder arguments cannot be null");
-            }
             this.stationStart = stationStart;
             this.stationEnd = stationEnd;
             this.startedJourneyAt = startedJourneyAt;

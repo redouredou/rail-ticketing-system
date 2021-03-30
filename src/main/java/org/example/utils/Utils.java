@@ -1,15 +1,15 @@
-package org.example;
+package org.example.utils;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.enums.Station;
+import org.example.enums.TravelPrice;
 import org.example.enums.Zone;
 import org.example.model.RootInput;
 import org.example.model.RootOutput;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,31 +34,12 @@ public class Utils {
 
     public static void generateOutputFile(RootOutput rootOutput, String outfile) throws JSONException {
         ObjectMapper mapper = new ObjectMapper();
-
-
         try {
-            //Convert object to JSON string and save into file directly
             mapper.writeValue(new File(outfile), rootOutput);
-
-            /*//Convert object to JSON string
-            String jsonInString = mapper.writeValueAsString(user);
-            System.out.println(jsonInString);
-
-            //Convert object to JSON string and pretty print
-            jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
-            System.out.println(jsonInString);*/
-
-
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 
     public static Set<Integer> checkZoneStation(Station zoneStation){
         Set<Integer> zoneAffiliations = new HashSet<>();
@@ -89,6 +70,15 @@ public class Utils {
         }
 
         return zoneAffiliations;
+    }
+
+    public static Map<String, Double> getCostByTravel(Set<Integer> zoneFrom, Set<Integer> zoneTo){
+        HashMap<String, Double> costsByTravel = new HashMap<>();
+        zoneFrom.forEach( zoneFromElt ->
+                    zoneTo.forEach( zoneToElt ->
+                        costsByTravel.put(zoneFromElt+" "+zoneToElt, TravelPrice.getTravelPriceMap().get(zoneFromElt+" "+zoneToElt))
+                    ));
+        return costsByTravel;
     }
 
     public static <K, V> Stream<K> keys(Map<K, V> map, V value) {

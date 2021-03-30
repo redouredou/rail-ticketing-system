@@ -3,6 +3,7 @@ package org.example;
 import org.example.model.*;
 import org.example.services.TripServices;
 import org.example.services.TripServicesImpl;
+import org.example.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +23,7 @@ public class RailTicketingProcessor {
     public static void run(String inputFilePath, String outputFilePath){
         RootInput jsonInput = Utils.parseJSONFile(inputFilePath);
 
-        List<Integer> customerIdList= jsonInput.getTaps().stream().map(tap -> tap.getCustomerId()).distinct().collect(Collectors.toList());
+        List<Integer> customerIdList= jsonInput.getTaps().stream().map(Tap::getCustomerId).distinct().collect(Collectors.toList());
 
         List<CustomerSummarie> customerSummaries = new ArrayList<>();
 
@@ -39,7 +40,7 @@ public class RailTicketingProcessor {
                     .values();
 
             List<Trip> trips = new ArrayList<>();
-            result.stream().forEach(coupleTap ->
+            result.forEach(coupleTap ->
                     trips.add(tripServices.updateTrip(
                             new Trip.Builder(
                                     coupleTap.get(0).getStation(),
@@ -50,7 +51,7 @@ public class RailTicketingProcessor {
 
             CustomerSummarie customerSummarie = new CustomerSummarie(
                     customerIdElt,
-                    trips.stream().map(trip -> trip.getCostInCents()).reduce(0.0, (subtotal, element) -> subtotal + element),
+                    trips.stream().map(Trip::getCostInCents).reduce(0.0, Double::sum),
                     trips);
 
             customerSummaries.add(customerSummarie);
