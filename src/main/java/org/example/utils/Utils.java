@@ -6,6 +6,7 @@ import org.example.enums.TravelPrice;
 import org.example.enums.Zone;
 import org.example.model.RootInput;
 import org.example.model.RootOutput;
+import org.example.model.TravelZone;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
@@ -41,29 +42,29 @@ public class Utils {
         }
     }
 
-    public static Set<Integer> checkZoneStation(Station zoneStation){
-        Set<Integer> zoneAffiliations = new HashSet<>();
+    public static Set<Zone> checkZoneStation(Station zoneStation){
+        Set<Zone> zoneAffiliations = new HashSet<>();
         switch (zoneStation){
             case A:
             case B:
-                zoneAffiliations.add(Zone.ONE.getZoneNumber());
+                zoneAffiliations.add(Zone.ONE);
                 break;
             case C:
             case E:
-                zoneAffiliations.add(Zone.TWO.getZoneNumber());
-                zoneAffiliations.add(Zone.THREE.getZoneNumber());
+                zoneAffiliations.add(Zone.TWO);
+                zoneAffiliations.add(Zone.THREE);
                 break;
             case D:
-                zoneAffiliations.add(Zone.TWO.getZoneNumber());
+                zoneAffiliations.add(Zone.TWO);
                 break;
             case F:
-                zoneAffiliations.add(Zone.THREE.getZoneNumber());
-                zoneAffiliations.add(Zone.FOUR.getZoneNumber());
+                zoneAffiliations.add(Zone.THREE);
+                zoneAffiliations.add(Zone.FOUR);
                 break;
             case G:
             case H:
             case I:
-                zoneAffiliations.add(Zone.FOUR.getZoneNumber());
+                zoneAffiliations.add(Zone.FOUR);
                 break;
             default:
                 throw new IllegalArgumentException("No recognized Station");
@@ -72,12 +73,15 @@ public class Utils {
         return zoneAffiliations;
     }
 
-    public static Map<String, Double> getCostByTravel(Set<Integer> zoneFrom, Set<Integer> zoneTo){
-        HashMap<String, Double> costsByTravel = new HashMap<>();
+    public static Map<TravelZone, Double> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){
+        HashMap<TravelZone, Double> costsByTravel = new HashMap<>();
+
         zoneFrom.forEach( zoneFromElt ->
-                    zoneTo.forEach( zoneToElt ->
-                        costsByTravel.put(zoneFromElt+" "+zoneToElt, TravelPrice.getTravelPriceMap().get(zoneFromElt+" "+zoneToElt))
-                    ));
+                    zoneTo.forEach( zoneToElt -> {
+                        TravelZone travelZone = new TravelZone(zoneFromElt, zoneToElt);
+                        costsByTravel.put(travelZone, TravelPrice.getTravelPriceMap().get(travelZone));
+                    }));
+
         return costsByTravel;
     }
 

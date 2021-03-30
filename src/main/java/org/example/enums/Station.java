@@ -1,10 +1,12 @@
 package org.example.enums;
 
+import java.util.Arrays;
+
 public enum Station {
     A("A"), B("B"), C("C"), D("D"), E("E"), F("F"), G("G"), H("H"), I("I");
 
 
-    private String stationValue;
+    private final String stationValue;
 
     Station(String stationValue) {
         this.stationValue = stationValue;
@@ -16,11 +18,9 @@ public enum Station {
 
 
     public static Station getStationName(String stationName) {
-        for (Station station : Station.values()) {
-            if (station.getStationValue().equals(stationName)) {
-                return station;
-            }
-        }
-        return null;
+            return Arrays.stream(Station.values())
+                    .filter(station -> station.name().equals(stationName))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("this enum doesn't exist "));
     }
 }

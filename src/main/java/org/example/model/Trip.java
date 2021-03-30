@@ -1,12 +1,14 @@
 package org.example.model;
 
+import org.example.enums.Zone;
+
 public class Trip {
     private final String stationStart;
     private final String stationEnd;
     private final int startedJourneyAt;
     private final double costInCents;
-    private final int zoneFrom;
-    private final int zoneTo;
+    private final Zone zoneFrom;
+    private final Zone zoneTo;
 
     private Trip(Builder builder){
         this.stationStart = builder.stationStart;
@@ -33,11 +35,11 @@ public class Trip {
         return costInCents;
     }
 
-    public int getZoneFrom() {
+    public Zone getZoneFrom() {
         return zoneFrom;
     }
 
-    public int getZoneTo() {
+    public Zone getZoneTo() {
         return zoneTo;
     }
 
@@ -59,8 +61,8 @@ public class Trip {
         private final String stationEnd;
         private final int startedJourneyAt;
         private double costInCents;
-        private int zoneFrom;
-        private int zoneTo;
+        private Zone zoneFrom;
+        private Zone zoneTo;
 
         public Builder(String stationStart, String stationEnd, int startedJourneyAt) {
             this.stationStart = stationStart;
@@ -73,12 +75,12 @@ public class Trip {
             return this;
         }
 
-        public Builder withZoneFrom(int zoneFrom) {
+        public Builder withZoneFrom(Zone zoneFrom) {
             this.zoneFrom = zoneFrom;
             return this;
         }
 
-        public Builder withZoneTo(int zoneTo) {
+        public Builder withZoneTo(Zone zoneTo) {
             this.zoneTo = zoneTo;
             return this;
         }

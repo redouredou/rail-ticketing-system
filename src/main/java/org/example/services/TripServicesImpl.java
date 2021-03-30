@@ -1,19 +1,20 @@
 package org.example.services;
 
+import org.example.enums.Zone;
+import org.example.model.TravelZone;
 import org.example.utils.Utils;
 import org.example.enums.Station;
 import org.example.model.Trip;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TripServicesImpl implements TripServices{
     @Override
     public Trip updateTrip(Trip trip) {
-        Set<Integer> zoneFrom = Utils.checkZoneStation(Station.getStationName(trip.getStationStart()));
-        Set<Integer> zoneTo = Utils.checkZoneStation(Station.getStationName(trip.getStationEnd()));
+        Set<Zone> zonesOfStationStart = Utils.checkZoneStation(Station.getStationName(trip.getStationStart()));
+        Set<Zone> zonesOfStationEnd = Utils.checkZoneStation(Station.getStationName(trip.getStationEnd()));
 
-        Map<String, Double> costsByTravel = Utils.getCostByTravel(zoneFrom, zoneTo);
+        Map<TravelZone, Double> costsByTravel = Utils.getCostByTravel(zonesOfStationStart, zonesOfStationEnd);
 
         Optional<Double> minimalCostOpt = costsByTravel.values().stream().min(Double::compare);
 
@@ -22,25 +23,37 @@ public class TripServicesImpl implements TripServices{
             minimalCost = minimalCostOpt.get();
         }
 
-        Stream<String> keyStream1 = Utils.keys(costsByTravel, minimalCost);
+        List<TravelZone> travelZoneList = Utils.keys(costsByTravel, minimalCost).collect(Collectors.toList());
 
-        List<String[]> stationFromToList = keyStream1
-                .map(stationFromTo -> stationFromTo.split(" "))
-                .collect(Collectors.toList());
+        TravelZone travelZoneForNewTrip = getTravelZoneForNewTrip(travelZoneList);
 
-        List<String[]> stationFromToSame = stationFromToList.stream().filter(elt -> elt[0].equals(elt[1])).collect(Collectors.toList());
-
-        String[] stationFromTo;
-        if(!stationFromToSame.isEmpty()){
-            stationFromTo = stationFromToSame.get(0);
-        }else{
-            stationFromTo = stationFromToList.get(0);
-        }
 
         return new Trip.Builder(trip.getStationStart(), trip.getStationEnd(), trip.getStartedJourneyAt())
                 .withCostInCents(minimalCost * 100)
-                .withZoneFrom(Integer.valueOf(stationFromTo[0]))
-                .withZoneTo(Integer.valueOf(stationFromTo[1]))
+                .withZoneFrom(travelZoneForNewTrip.getZoneStart())
+                .withZoneTo(travelZoneForNewTrip.getZoneEnd())
                 .build();
+    }
+
+    public TravelZone getTravelZoneForNewTrip(List<TravelZone> travelZoneList){
+        TravelZone travelZoneForNewTrip = null;
+        Optional<TravelZone> travelZoneForNewTripOpt;
+
+        if(travelZoneList.toArray().length > 1){
+            travelZoneForNewTripOpt = travelZoneList
+                    .stream()
+                    .filter(travelZone -> travelZone.getZoneStart().equals(travelZone.getZoneEnd()))
+                    .findFirst();
+        }else{
+            travelZoneForNewTripOpt = travelZoneList
+                    .stream()
+                    .findFirst();
+        }
+
+        if(travelZoneForNewTripOpt.isPresent()){
+            travelZoneForNewTrip = travelZoneForNewTripOpt.get();
+        }
+
+        return travelZoneForNewTrip;
     }
 }

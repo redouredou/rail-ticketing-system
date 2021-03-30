@@ -17,7 +17,7 @@ public class RailTicketingProcessor {
         throw new IllegalArgumentException("RailTicketingProcessor class");
     }
 
-    private static TripServices tripServices = new TripServicesImpl();
+    private static final TripServices tripServices = new TripServicesImpl();
 
     
     public static void run(String inputFilePath, String outputFilePath){
@@ -25,7 +25,7 @@ public class RailTicketingProcessor {
 
         List<Integer> customerIdList= jsonInput.getTaps().stream().map(Tap::getCustomerId).distinct().collect(Collectors.toList());
 
-        List<CustomerSummarie> customerSummaries = new ArrayList<>();
+        List<CustomerSummary> customerSummaries = new ArrayList<>();
 
         customerIdList.forEach(customerIdElt -> {
                     List<Tap> tapByCustomerList = jsonInput
@@ -49,12 +49,12 @@ public class RailTicketingProcessor {
                                     .build()
                     )));
 
-            CustomerSummarie customerSummarie = new CustomerSummarie(
+            CustomerSummary customerSummary = new CustomerSummary(
                     customerIdElt,
                     trips.stream().map(Trip::getCostInCents).reduce(0.0, Double::sum),
                     trips);
 
-            customerSummaries.add(customerSummarie);
+            customerSummaries.add(customerSummary);
         });
 
 

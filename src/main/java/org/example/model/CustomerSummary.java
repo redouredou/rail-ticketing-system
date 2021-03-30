@@ -2,7 +2,7 @@ package org.example.model;
 
 import java.util.List;
 
-public class CustomerSummarie {
+public class CustomerSummary {
 
     private int customerId;
 
@@ -10,7 +10,7 @@ public class CustomerSummarie {
 
     List<Trip> trips;
 
-    public CustomerSummarie(int customerId, double totalCostInCents, List<Trip> trips){
+    public CustomerSummary(int customerId, double totalCostInCents, List<Trip> trips){
         this.customerId = customerId;
         this.totalCostInCents = totalCostInCents;
         this.trips = trips;

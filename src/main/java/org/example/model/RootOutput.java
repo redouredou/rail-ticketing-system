@@ -4,13 +4,13 @@ import java.util.List;
 
 public class RootOutput {
 
-    private List<CustomerSummarie> customerSummaries;
+    private final List<CustomerSummary> customerSummaries;
 
-    public RootOutput(List<CustomerSummarie> customerSummaries){
+    public RootOutput(List<CustomerSummary> customerSummaries){
         this.customerSummaries = customerSummaries;
     }
 
-    public List<CustomerSummarie> getCustomerSummaries() {
+    public List<CustomerSummary> getCustomerSummaries() {
         return customerSummaries;
     }
 }
