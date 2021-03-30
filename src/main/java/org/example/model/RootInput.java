@@ -2,7 +2,7 @@ package org.example.model;
 
 import java.util.List;
 
-public class Root {
+public class RootInput {
 
     private List<Tap> taps;
 
