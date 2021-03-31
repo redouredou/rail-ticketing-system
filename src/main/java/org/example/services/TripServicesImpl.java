@@ -29,7 +29,7 @@ public class TripServicesImpl implements TripServices{
 
 
         return new Trip.Builder(trip.getStationStart(), trip.getStationEnd(), trip.getStartedJourneyAt())
-                .withCostInCents(minimalCost * 100)
+                .withCostInCents(Utils.convertEuroToCents(minimalCost))
                 .withZoneFrom(travelZoneForNewTrip.getZoneStart())
                 .withZoneTo(travelZoneForNewTrip.getZoneEnd())
                 .build();

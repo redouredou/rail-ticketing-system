@@ -6,11 +6,11 @@ public class CustomerSummary {
 
     private int customerId;
 
-    private double totalCostInCents;
+    private int totalCostInCents;
 
     List<Trip> trips;
 
-    public CustomerSummary(int customerId, double totalCostInCents, List<Trip> trips){
+    public CustomerSummary(int customerId, int totalCostInCents, List<Trip> trips){
         this.customerId = customerId;
         this.totalCostInCents = totalCostInCents;
         this.trips = trips;
@@ -24,11 +24,11 @@ public class CustomerSummary {
         this.customerId = customerId;
     }
 
-    public double getTotalCostInCents() {
+    public int getTotalCostInCents() {
         return totalCostInCents;
     }
 
-    public void setTotalCostInCents(double totalCostInCents) {
+    public void setTotalCostInCents(int totalCostInCents) {
         this.totalCostInCents = totalCostInCents;
     }
 

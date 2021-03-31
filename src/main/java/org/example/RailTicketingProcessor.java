@@ -6,8 +6,8 @@ import org.example.services.TripServicesImpl;
 import org.example.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -19,46 +19,52 @@ public class RailTicketingProcessor {
 
     private static final TripServices tripServices = new TripServicesImpl();
 
-    
     public static void run(String inputFilePath, String outputFilePath){
         RootInput jsonInput = Utils.parseJSONFile(inputFilePath);
 
-        List<Integer> customerIdList= jsonInput.getTaps().stream().map(Tap::getCustomerId).distinct().collect(Collectors.toList());
+        List<CustomerSummary> customerSummaries = buildCustomerSummaries(jsonInput);
+
+        Utils.generateOutputFile(new RootOutput(customerSummaries), outputFilePath);
+    }
+
+    public static List<CustomerSummary> buildCustomerSummaries(RootInput jsonInput){
+        Set<Integer> customerIds= jsonInput.getTaps().stream().map(Tap::getCustomerId).collect(Collectors.toSet());
 
         List<CustomerSummary> customerSummaries = new ArrayList<>();
 
-        customerIdList.forEach(customerIdElt -> {
-                    List<Tap> tapByCustomerList = jsonInput
-                            .getTaps()
-                            .stream()
-                            .filter(tap -> tap.getCustomerId() == customerIdElt).collect(Collectors.toList());
+        customerIds.forEach(customerIdElt -> {
+            Set<Tap> allTapsByCustomer = jsonInput
+                    .getTaps()
+                    .stream()
+                    .filter(tap -> tap.getCustomerId() == customerIdElt).collect(Collectors.toSet());
+
             final int chunkSize = 2;
             final AtomicInteger counter = new AtomicInteger();
-
-            final Collection<List<Tap>> result = tapByCustomerList.stream()
+            final Set<TapPair> allTapPairsByCustomer = allTapsByCustomer.stream()
                     .collect(Collectors.groupingBy(it -> counter.getAndIncrement() / chunkSize))
-                    .values();
+                    .values()
+                    .stream()
+                    .map(tapPair -> new TapPair(tapPair.get(0), tapPair.get(1)))
+                    .collect(Collectors.toSet());
 
             List<Trip> trips = new ArrayList<>();
-            result.forEach(coupleTap ->
+            allTapPairsByCustomer.forEach(tapPair ->
                     trips.add(tripServices.updateTrip(
                             new Trip.Builder(
-                                    coupleTap.get(0).getStation(),
-                                    coupleTap.get(1).getStation(),
-                                    coupleTap.get(0).getUnixTimestamp())
+                                    tapPair.getTapStart().getStation(),
+                                    tapPair.getTapEnd().getStation(),
+                                    tapPair.getTapStart().getUnixTimestamp())
                                     .build()
                     )));
 
             CustomerSummary customerSummary = new CustomerSummary(
                     customerIdElt,
-                    trips.stream().map(Trip::getCostInCents).reduce(0.0, Double::sum),
+                    trips.stream().map(Trip::getCostInCents).reduce(0, Integer::sum),
                     trips);
 
             customerSummaries.add(customerSummary);
         });
 
-
-
-        Utils.generateOutputFile(new RootOutput(customerSummaries), outputFilePath);
+        return customerSummaries;
     }
 }

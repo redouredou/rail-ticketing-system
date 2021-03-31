@@ -92,4 +92,8 @@ public class Utils {
                 .filter(entry -> value.equals(entry.getValue()))
                 .map(Map.Entry::getKey);
     }
+
+    public static int convertEuroToCents(double number){
+        return (int)(Math.round(number * 100));
+    }
 }

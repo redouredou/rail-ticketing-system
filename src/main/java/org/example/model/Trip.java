@@ -6,7 +6,7 @@ public class Trip {
     private final String stationStart;
     private final String stationEnd;
     private final int startedJourneyAt;
-    private final double costInCents;
+    private final int costInCents;
     private final Zone zoneFrom;
     private final Zone zoneTo;
 
@@ -31,7 +31,7 @@ public class Trip {
         return startedJourneyAt;
     }
 
-    public double getCostInCents() {
+    public int getCostInCents() {
         return costInCents;
     }
 
@@ -60,7 +60,7 @@ public class Trip {
         private final String stationStart;
         private final String stationEnd;
         private final int startedJourneyAt;
-        private double costInCents;
+        private int costInCents;
         private Zone zoneFrom;
         private Zone zoneTo;
 
@@ -70,7 +70,7 @@ public class Trip {
             this.startedJourneyAt = startedJourneyAt;
         }
 
-        public Builder withCostInCents(double costInCents) {
+        public Builder withCostInCents(int costInCents) {
             this.costInCents = costInCents;
             return this;
         }
