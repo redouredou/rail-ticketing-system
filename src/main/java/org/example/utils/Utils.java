@@ -10,10 +10,7 @@ import org.example.model.TravelZone;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Utils {
@@ -42,7 +39,7 @@ public class Utils {
         }
     }
 
-    public static Set<Zone> checkZoneStation(Station zoneStation){
+    public static Set<Zone> getZonesByStation(Station zoneStation){
         Set<Zone> zoneAffiliations = new HashSet<>();
         switch (zoneStation){
             case A:
@@ -66,11 +63,9 @@ public class Utils {
             case I:
                 zoneAffiliations.add(Zone.FOUR);
                 break;
-            default:
-                throw new IllegalArgumentException("No recognized Station");
         }
 
-        return zoneAffiliations;
+        return Collections.unmodifiableSet(zoneAffiliations);
     }
 
     public static Map<TravelZone, Double> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){

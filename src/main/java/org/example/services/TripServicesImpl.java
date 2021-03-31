@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class TripServicesImpl implements TripServices{
     @Override
     public Trip updateTrip(Trip trip) {
-        Set<Zone> zonesOfStationStart = Utils.checkZoneStation(Station.getStationName(trip.getStationStart()));
-        Set<Zone> zonesOfStationEnd = Utils.checkZoneStation(Station.getStationName(trip.getStationEnd()));
+        Set<Zone> zonesOfStationStart = Utils.getZonesByStation(Station.getStationName(trip.getStationStart()));
+        Set<Zone> zonesOfStationEnd = Utils.getZonesByStation(Station.getStationName(trip.getStationEnd()));
 
         Map<TravelZone, Double> costsByTravel = Utils.getCostByTravel(zonesOfStationStart, zonesOfStationEnd);
 
