@@ -6,7 +6,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public enum TravelPrice {
+
     FROM_ZONE_1_TO_ZONE_1(new TravelZone(Zone.ONE, Zone.ONE),2.40),
     FROM_ZONE_1_TO_ZONE_2(new TravelZone(Zone.ONE, Zone.TWO),2.40),
     FROM_ZONE_1_TO_ZONE_3(new TravelZone(Zone.ONE, Zone.THREE),2.80),
@@ -30,6 +33,7 @@ public enum TravelPrice {
     private final double price;
     private final TravelZone travelZone;
     private static final Map<TravelZone, Double> travelPriceMap = Collections.unmodifiableMap(initMapping());
+
 
     TravelPrice(TravelZone travelZone,double price){
         this.travelZone = travelZone;
