@@ -1,12 +1,12 @@
-package org.example.utils;
+package org.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.enums.Station;
-import org.example.enums.TravelPrice;
-import org.example.enums.Zone;
-import org.example.model.RootInput;
-import org.example.model.RootOutput;
-import org.example.model.TravelZone;
+import org.example.Station;
+import org.example.TravelPrice;
+import org.example.Zone;
+import org.example.RootInput;
+import org.example.RootOutput;
+import org.example.TravelZone;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;

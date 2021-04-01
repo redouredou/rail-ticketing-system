@@ -1,4 +1,4 @@
-package org.example.enums;
+package org.example;
 
 public enum Zone {
     ONE(1),TWO(2),THREE(3),FOUR(4);

@@ -1,6 +1,4 @@
-package org.example.model;
-
-import org.example.enums.Zone;
+package org.example;
 
 public class Trip {
     private final String stationStart;

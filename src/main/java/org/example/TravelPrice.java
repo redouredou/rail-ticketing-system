@@ -1,6 +1,4 @@
-package org.example.enums;
-
-import org.example.model.TravelZone;
+package org.example;
 
 import java.util.Collections;
 import java.util.HashMap;

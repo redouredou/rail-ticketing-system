@@ -1,10 +1,5 @@
 package org.example;
 
-import org.example.model.*;
-import org.example.services.TripServices;
-import org.example.services.TripServicesImpl;
-import org.example.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

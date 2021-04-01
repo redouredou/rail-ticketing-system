@@ -1,6 +1,6 @@
-package org.example.services;
+package org.example;
 
-import org.example.model.Trip;
+import org.example.Trip;
 
 public interface TripServices {
     Trip updateTrip(Trip trip);

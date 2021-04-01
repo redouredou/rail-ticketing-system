@@ -1,10 +1,5 @@
-package org.example.services;
+package org.example;
 
-import org.example.enums.Zone;
-import org.example.model.TravelZone;
-import org.example.utils.Utils;
-import org.example.enums.Station;
-import org.example.model.Trip;
 import java.util.*;
 import java.util.stream.Collectors;
 

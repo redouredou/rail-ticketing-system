@@ -1,9 +1,5 @@
 package org.example;
 
-import org.example.enums.Station;
-import org.example.enums.Zone;
-import org.example.model.TravelZone;
-import org.example.utils.Utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

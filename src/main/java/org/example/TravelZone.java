@@ -1,6 +1,5 @@
-package org.example.model;
+package org.example;
 
-import org.example.enums.Zone;
 import java.util.Objects;
 
 public class TravelZone {
