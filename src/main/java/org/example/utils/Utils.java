@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.enums.Station;
 import org.example.enums.TravelPrice;
 import org.example.enums.Zone;
+import org.example.model.Price;
 import org.example.model.RootInput;
 import org.example.model.RootOutput;
 import org.example.model.TravelZone;
@@ -68,8 +69,8 @@ public class Utils {
         return Collections.unmodifiableSet(zoneAffiliations);
     }
 
-    public static Map<TravelZone, Double> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){
-        HashMap<TravelZone, Double> costsByTravel = new HashMap<>();
+    public static Map<TravelZone, Price> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){
+        HashMap<TravelZone, Price> costsByTravel = new HashMap<>();
 
         zoneFrom.forEach( zoneFromElt ->
                     zoneTo.forEach( zoneToElt -> {

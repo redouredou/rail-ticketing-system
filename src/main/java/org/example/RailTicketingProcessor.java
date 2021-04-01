@@ -7,6 +7,7 @@ import org.example.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -27,16 +28,14 @@ public class RailTicketingProcessor {
         Utils.generateOutputFile(new RootOutput(customerSummaries), outputFilePath);
     }
 
-    public static List<CustomerSummary> buildCustomerSummaries(RootInput jsonInput){
-        Set<Integer> customerIds= jsonInput.getTaps().stream().map(Tap::getCustomerId).collect(Collectors.toSet());
+    private static List<CustomerSummary> buildCustomerSummaries(RootInput jsonInput){
+        Map<Integer, Set<Tap>> customersTaps = jsonInput.getCustomersTaps();
+//        Set<Integer> customerIds= jsonInput.getTaps().stream().map(Tap::getCustomerId).collect(Collectors.toSet());
 
         List<CustomerSummary> customerSummaries = new ArrayList<>();
 
-        customerIds.forEach(customerIdElt -> {
-            Set<Tap> allTapsByCustomer = jsonInput
-                    .getTaps()
-                    .stream()
-                    .filter(tap -> tap.getCustomerId() == customerIdElt).collect(Collectors.toSet());
+        customersTaps.entrySet().forEach(entry -> {
+            Set<Tap> allTapsByCustomer = entry.getValue();
 
             final int chunkSize = 2;
             final AtomicInteger counter = new AtomicInteger();
@@ -58,7 +57,7 @@ public class RailTicketingProcessor {
                     )));
 
             CustomerSummary customerSummary = new CustomerSummary(
-                    customerIdElt,
+                    entry.getKey(),
                     trips.stream().map(Trip::getCostInCents).reduce(0, Integer::sum),
                     trips);
 
