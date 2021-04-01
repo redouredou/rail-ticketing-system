@@ -1,12 +1,13 @@
-package org.example;
+package org.example.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.Station;
-import org.example.TravelPrice;
-import org.example.Zone;
-import org.example.RootInput;
-import org.example.RootOutput;
-import org.example.TravelZone;
+import org.example.enums.Station;
+import org.example.enums.TravelPrice;
+import org.example.enums.Zone;
+import org.example.model.Price;
+import org.example.model.RootInput;
+import org.example.model.RootOutput;
+import org.example.model.TravelZone;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
@@ -68,8 +69,8 @@ public class Utils {
         return Collections.unmodifiableSet(zoneAffiliations);
     }
 
-    public static Map<TravelZone, Double> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){
-        HashMap<TravelZone, Double> costsByTravel = new HashMap<>();
+    public static Map<TravelZone, Price> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){
+        HashMap<TravelZone, Price> costsByTravel = new HashMap<>();
 
         zoneFrom.forEach( zoneFromElt ->
                     zoneTo.forEach( zoneToElt -> {

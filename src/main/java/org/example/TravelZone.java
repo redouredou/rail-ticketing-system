@@ -1,5 +1,7 @@
-package org.example;
+package org.example.model;
 
+import org.example.enums.TravelPrice;
+import org.example.enums.Zone;
 import java.util.Objects;
 
 public class TravelZone {
@@ -25,6 +27,14 @@ public class TravelZone {
 
     public void setZoneEnd(Zone zoneEnd) {
         this.zoneEnd = zoneEnd;
+    }
+
+    public Price getPrice() {
+        return TravelPrice.getTravelPriceMap().get(this);
+    }
+
+    public boolean startAndFinishInSameZone() {
+        return zoneStart.equals(zoneEnd);
     }
 
     @Override
