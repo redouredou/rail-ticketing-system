@@ -1,10 +1,13 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.example.inputmodel.RootInput;
+import org.example.inputmodel.Tap;
+import org.example.inputmodel.TapPair;
+import org.example.outputmodel.CustomerSummary;
+import org.example.outputmodel.RootOutput;
+import org.example.outputmodel.Trip;
+import org.example.util.Utils;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RailTicketingProcessor {
@@ -12,8 +15,6 @@ public class RailTicketingProcessor {
     private RailTicketingProcessor(){
         throw new IllegalArgumentException("RailTicketingProcessor class");
     }
-
-    private static final TripServices tripServices = new TripServicesImpl();
 
     public static void run(String inputFilePath, String outputFilePath){
         RootInput jsonInput = Utils.parseJSONFile(inputFilePath);
@@ -25,31 +26,24 @@ public class RailTicketingProcessor {
 
     private static List<CustomerSummary> buildCustomerSummaries(RootInput jsonInput){
         Map<Integer, Set<Tap>> customersTaps = jsonInput.getCustomersTaps();
-//        Set<Integer> customerIds= jsonInput.getTaps().stream().map(Tap::getCustomerId).collect(Collectors.toSet());
 
         List<CustomerSummary> customerSummaries = new ArrayList<>();
 
         customersTaps.entrySet().forEach(entry -> {
-            Set<Tap> allTapsByCustomer = entry.getValue();
+            List<Tap> allTapsByCustomer = entry.getValue()
+                    .stream()
+                    .sorted(Comparator.comparingInt(Tap::getUnixTimestamp))
+                    .collect(Collectors.toList());
 
-            final int chunkSize = 2;
-            final AtomicInteger counter = new AtomicInteger();
-            final Set<TapPair> allTapPairsByCustomer = allTapsByCustomer.stream()
-                    .collect(Collectors.groupingBy(it -> counter.getAndIncrement() / chunkSize))
-                    .values()
+            List<TapPair> allTapPairsByCustomer = Utils.partitionBasedOnSize(allTapsByCustomer, 2)
                     .stream()
                     .map(tapPair -> new TapPair(tapPair.get(0), tapPair.get(1)))
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
 
-            List<Trip> trips = new ArrayList<>();
-            allTapPairsByCustomer.forEach(tapPair ->
-                    trips.add(tripServices.updateTrip(
-                            new Trip.Builder(
-                                    tapPair.getTapStart().getStation(),
-                                    tapPair.getTapEnd().getStation(),
-                                    tapPair.getTapStart().getUnixTimestamp())
-                                    .build()
-                    )));
+            List<Trip> trips = allTapPairsByCustomer
+                    .stream()
+                    .map(tapPair -> Trip.updateTrip(new Trip.Builder(tapPair.getTapStart().getStation(), tapPair.getTapEnd().getStation(), tapPair.getTapStart().getUnixTimestamp()).build()))
+                    .collect(Collectors.toList());
 
             CustomerSummary customerSummary = new CustomerSummary(
                     entry.getKey(),

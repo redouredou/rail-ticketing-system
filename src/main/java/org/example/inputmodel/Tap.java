@@ -1,6 +1,8 @@
-package org.example;
+package org.example.inputmodel;
 
-public class Tap{
+import java.util.Objects;
+
+public class Tap implements Comparable<Tap>{
 
     private int unixTimestamp;
 
@@ -31,6 +33,8 @@ public class Tap{
     public void setStation(String station) {
         this.station = station; }
 
+
+
     @Override
     public String toString() {
         return "Tap{" +
@@ -38,5 +42,23 @@ public class Tap{
                 ", customerId=" + customerId +
                 ", station='" + station + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Tap o) {
+        return Integer.compare(unixTimestamp, o.unixTimestamp);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tap tap = (Tap) o;
+        return unixTimestamp == tap.unixTimestamp && customerId == tap.customerId && Objects.equals(station, tap.station);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(unixTimestamp, customerId, station);
     }
 }

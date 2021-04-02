@@ -1,12 +1,16 @@
-package org.example;
+package org.example.outputmodel;
+
+import org.example.inputmodel.Price;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Trip {
     private final String stationStart;
     private final String stationEnd;
     private final int startedJourneyAt;
     private final int costInCents;
-    private final Zone zoneFrom;
-    private final Zone zoneTo;
+    private final int zoneFrom;
+    private final int zoneTo;
 
     private Trip(Builder builder){
         this.stationStart = builder.stationStart;
@@ -33,11 +37,11 @@ public class Trip {
         return costInCents;
     }
 
-    public Zone getZoneFrom() {
+    public int getZoneFrom() {
         return zoneFrom;
     }
 
-    public Zone getZoneTo() {
+    public int getZoneTo() {
         return zoneTo;
     }
 
@@ -53,14 +57,41 @@ public class Trip {
                 '}';
     }
 
+    public static Trip updateTrip(Trip trip) {
+
+        List<TravelZone> travelsZone = TravelZone.getTravelsZoneByStations(Station.getStationName(trip.stationStart), Station.getStationName(trip.getStationEnd()));
+
+        Price minimalCost = travelsZone.stream()
+                .map(TravelZone::getPrice)
+                .min(Comparator.naturalOrder())
+                .orElse(Price.Free);
+
+        List<TravelZone> travelsZoneWithMinimalCharge = travelsZone
+                .stream()
+                .filter(travelZone -> travelZone.getPrice().equals(minimalCost))
+                .collect(Collectors.toList());
+
+        TravelZone travelZoneForNewTrip = travelsZoneWithMinimalCharge
+                .stream()
+                .filter(TravelZone::startAndFinishInSameZone)
+                .findFirst()
+                .orElse(travelsZoneWithMinimalCharge.get(0));
+
+        return new Trip.Builder(trip.getStationStart(), trip.getStationEnd(), trip.getStartedJourneyAt())
+                .withCostInCents(travelZoneForNewTrip.getPrice().convertEuroToCents())
+                .withZoneFrom(travelZoneForNewTrip.getZoneStart().getZoneNumber())
+                .withZoneTo(travelZoneForNewTrip.getZoneEnd().getZoneNumber())
+                .build();
+    }
+
     public static class Builder {
 
         private final String stationStart;
         private final String stationEnd;
         private final int startedJourneyAt;
         private int costInCents;
-        private Zone zoneFrom;
-        private Zone zoneTo;
+        private int zoneFrom;
+        private int zoneTo;
 
         public Builder(String stationStart, String stationEnd, int startedJourneyAt) {
             this.stationStart = stationStart;
@@ -73,12 +104,12 @@ public class Trip {
             return this;
         }
 
-        public Builder withZoneFrom(Zone zoneFrom) {
+        public Builder withZoneFrom(int zoneFrom) {
             this.zoneFrom = zoneFrom;
             return this;
         }
 
-        public Builder withZoneTo(Zone zoneTo) {
+        public Builder withZoneTo(int zoneTo) {
             this.zoneTo = zoneTo;
             return this;
         }

@@ -1,8 +1,8 @@
-package org.example.model;
+package org.example.outputmodel;
 
-import org.example.enums.TravelPrice;
-import org.example.enums.Zone;
-import java.util.Objects;
+import org.example.inputmodel.Price;
+
+import java.util.*;
 
 public class TravelZone {
     private Zone zoneStart;
@@ -35,6 +35,14 @@ public class TravelZone {
 
     public boolean startAndFinishInSameZone() {
         return zoneStart.equals(zoneEnd);
+    }
+
+    public static List<TravelZone> getTravelsZoneByStations(Station stationStart, Station stationEnd){
+        List<TravelZone> travelsByZone = new ArrayList<>();
+        ZoneStationMapping.getZonesByStation(stationStart).forEach(zoneStart ->
+            ZoneStationMapping.getZonesByStation(stationEnd).forEach(zoneEnd -> travelsByZone.add(new TravelZone(zoneStart, zoneEnd)))
+        );
+        return travelsByZone;
     }
 
     @Override

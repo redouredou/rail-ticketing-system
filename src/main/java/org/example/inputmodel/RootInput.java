@@ -1,6 +1,4 @@
-package org.example;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package org.example.inputmodel;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +9,6 @@ import static java.util.stream.Collectors.toSet;
 
 public class RootInput {
 
-    @JsonProperty
     private List<Tap> taps;
 
     public List<Tap> getTaps() {
