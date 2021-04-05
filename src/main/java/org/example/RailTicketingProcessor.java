@@ -35,7 +35,7 @@ public class RailTicketingProcessor {
                     .sorted(Comparator.comparingInt(Tap::getUnixTimestamp))
                     .collect(Collectors.toList());
 
-            List<TapPair> allTapPairsByCustomer = Utils.partitionBasedOnSize(allTapsByCustomer, 2)
+            List<TapPair> allTapPairsByCustomer = Utils.partitionByPair(allTapsByCustomer)
                     .stream()
                     .map(tapPair -> new TapPair(tapPair.get(0), tapPair.get(1)))
                     .collect(Collectors.toList());

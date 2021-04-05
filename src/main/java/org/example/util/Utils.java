@@ -2,11 +2,7 @@ package org.example.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.outputmodel.RootOutput;
-import org.example.outputmodel.TravelPrice;
-import org.example.inputmodel.Price;
 import org.example.inputmodel.RootInput;
-import org.example.outputmodel.TravelZone;
-import org.example.outputmodel.Zone;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
@@ -40,24 +36,12 @@ public class Utils {
         }
     }
 
-    public static Map<TravelZone, Price> getCostByTravel(Set<Zone> zoneFrom, Set<Zone> zoneTo){
-        HashMap<TravelZone, Price> costsByTravel = new HashMap<>();
 
-        zoneFrom.forEach( zoneFromElt ->
-                    zoneTo.forEach( zoneToElt -> {
-                        TravelZone travelZone = new TravelZone(zoneFromElt, zoneToElt);
-                        costsByTravel.put(travelZone, TravelPrice.getTravelPriceMap().get(travelZone));
-                    }));
-
-        return costsByTravel;
-    }
-
-
-    public static <T> List<List<T>> partitionBasedOnSize(List<T> inputList, int size) {
+    public static <T> List<List<T>> partitionByPair(List<T> inputList) {
         final AtomicInteger counter = new AtomicInteger(0);
         return inputList
                 .stream()
-                .collect(Collectors.groupingBy(s -> counter.getAndIncrement()/size))
+                .collect(Collectors.groupingBy(s -> counter.getAndIncrement()/2))
                 .values()
                 .stream()
                 .collect(Collectors.toList());

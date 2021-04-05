@@ -7,6 +7,9 @@ public class Price implements Comparable<Price> {
     private final double value;
 
     public Price(double value) {
+        if(value < 0){
+            throw new IllegalArgumentException("The price can't be negative");
+        }
         this.value = value;
     }
 
@@ -30,5 +33,12 @@ public class Price implements Comparable<Price> {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return "Price{" +
+                "value=" + value +
+                '}';
     }
 }

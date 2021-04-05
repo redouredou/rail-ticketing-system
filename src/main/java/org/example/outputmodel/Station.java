@@ -17,10 +17,17 @@ public enum Station {
     }
 
 
-    public static Station getStationName(String stationName) {
+    public static Station getStationByName(String stationName) {
             return Arrays.stream(Station.values())
                     .filter(station -> station.name().equals(stationName))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("this enum doesn't exist "));
+                    .orElseThrow(() -> new IllegalArgumentException("this enum doesn't exist"));
+    }
+
+    @Override
+    public String toString() {
+        return "Station{" +
+                "stationValue='" + stationValue + '\'' +
+                '}';
     }
 }

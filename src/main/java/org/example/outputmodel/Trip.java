@@ -1,8 +1,5 @@
 package org.example.outputmodel;
-
-import org.example.inputmodel.Price;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Trip {
     private final String stationStart;
@@ -59,23 +56,9 @@ public class Trip {
 
     public static Trip updateTrip(Trip trip) {
 
-        List<TravelZone> travelsZone = TravelZone.getTravelsZoneByStations(Station.getStationName(trip.stationStart), Station.getStationName(trip.getStationEnd()));
+        List<TravelZone> travelsZone = TravelZone.getTravelsZoneByStations(Station.getStationByName(trip.stationStart), Station.getStationByName(trip.getStationEnd()));
 
-        Price minimalCost = travelsZone.stream()
-                .map(TravelZone::getPrice)
-                .min(Comparator.naturalOrder())
-                .orElse(Price.Free);
-
-        List<TravelZone> travelsZoneWithMinimalCharge = travelsZone
-                .stream()
-                .filter(travelZone -> travelZone.getPrice().equals(minimalCost))
-                .collect(Collectors.toList());
-
-        TravelZone travelZoneForNewTrip = travelsZoneWithMinimalCharge
-                .stream()
-                .filter(TravelZone::startAndFinishInSameZone)
-                .findFirst()
-                .orElse(travelsZoneWithMinimalCharge.get(0));
+        TravelZone travelZoneForNewTrip = TravelZone.getShortestTravelZone(travelsZone);
 
         return new Trip.Builder(trip.getStationStart(), trip.getStationEnd(), trip.getStartedJourneyAt())
                 .withCostInCents(travelZoneForNewTrip.getPrice().convertEuroToCents())
