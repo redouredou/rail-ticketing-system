@@ -27,9 +27,7 @@ public class RailTicketingProcessor {
     private static List<CustomerSummary> buildCustomerSummaries(RootInput jsonInput){
         Map<Integer, Set<Tap>> customersTaps = jsonInput.getCustomersTaps();
 
-        List<CustomerSummary> customerSummaries = new ArrayList<>();
-
-        customersTaps.entrySet().forEach(entry -> {
+        return customersTaps.entrySet().stream().map(entry -> {
             List<Tap> allTapsByCustomer = entry.getValue()
                     .stream()
                     .sorted(Comparator.comparingInt(Tap::getUnixTimestamp))
@@ -45,14 +43,10 @@ public class RailTicketingProcessor {
                     .map(tapPair -> Trip.updateTrip(new Trip.Builder(tapPair.getTapStart().getStation(), tapPair.getTapEnd().getStation(), tapPair.getTapStart().getUnixTimestamp()).build()))
                     .collect(Collectors.toList());
 
-            CustomerSummary customerSummary = new CustomerSummary(
+            return new CustomerSummary(
                     entry.getKey(),
                     trips.stream().map(Trip::getCostInCents).reduce(0, Integer::sum),
                     trips);
-
-            customerSummaries.add(customerSummary);
-        });
-
-        return customerSummaries;
+        }).collect(Collectors.toList());
     }
 }
