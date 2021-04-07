@@ -1,4 +1,4 @@
-package org.example.inputmodel;
+package org.example.outputmodel;
 
 import java.util.Objects;
 

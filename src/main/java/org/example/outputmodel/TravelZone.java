@@ -1,7 +1,5 @@
 package org.example.outputmodel;
 
-import org.example.inputmodel.Price;
-
 import java.util.*;
 import java.util.stream.Collectors;
 

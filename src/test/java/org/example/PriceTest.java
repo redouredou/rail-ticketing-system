@@ -1,8 +1,6 @@
 package org.example;
 
-import org.example.inputmodel.Price;
-import org.example.outputmodel.Station;
-import org.junit.jupiter.api.Assertions;
+import org.example.outputmodel.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

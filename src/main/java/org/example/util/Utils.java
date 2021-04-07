@@ -8,9 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Utils {
+
+    private static final  Logger LOGGER = Logger.getLogger(Utils.class.getName());
 
     private Utils(){
         throw new IllegalArgumentException("Utility class");
@@ -21,6 +24,7 @@ public class Utils {
         try {
             ObjectMapper om = new ObjectMapper();
             rootInput = om.readValue(new File(filename), RootInput.class);
+            LOGGER.info(" Input file processing ...");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,6 +35,7 @@ public class Utils {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File(outfile), rootOutput);
+            LOGGER.info(" Generating output file ...");
         } catch (IOException e) {
             e.printStackTrace();
         }

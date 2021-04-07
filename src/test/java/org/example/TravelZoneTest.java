@@ -1,7 +1,6 @@
 package org.example;
 
-import org.assertj.core.api.Assertions;
-import org.example.inputmodel.Price;
+import org.example.outputmodel.Price;
 import org.example.outputmodel.Station;
 import org.example.outputmodel.TravelZone;
 import org.example.outputmodel.Zone;
