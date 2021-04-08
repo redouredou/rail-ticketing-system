@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.error.RailTicketingArgumentsNullException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -7,18 +8,21 @@ class AppTest
 {
 
     @Test
-    void the_Method_Main_should_throw_NullPointerException_when_args_is_empty()
+    void it_should_RailTicketingArgumentsNullException_with_message_when_args_is_empty()
     {
         //GIVEN
         String[] args = {};
 
         //WHEN
         //THEN
-        Assertions.assertThrows(NullPointerException.class, () -> App.main(args));
+
+        Exception exception = Assertions.assertThrows(RailTicketingArgumentsNullException.class, () -> App.main(args));
+
+        Assertions.assertEquals("Input data path and output path are missing", exception.getMessage());
     }
 
     @Test
-    void the_Method_Main_should_throw_NullPointerException_when_output_argument_is_missing()
+    void it_should_RailTicketingArgumentsNullException_with_message_when_output_argument_is_missing()
     {
 
         //GIVEN
@@ -27,7 +31,9 @@ class AppTest
 
         //WHEN
         //THEN
-        Assertions.assertThrows(NullPointerException.class, () -> App.main(args));
+        Exception exception = Assertions.assertThrows(RailTicketingArgumentsNullException.class, () -> App.main(args));
+
+        Assertions.assertEquals("Output path is missing", exception.getMessage());
     }
 
 }
