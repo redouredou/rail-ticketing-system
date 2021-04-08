@@ -1,7 +1,10 @@
 ## WELCOME TO THE RAIL TICKETING SYSTEM
+-> The rail ticketing kata is explained into the TestDetails.txt
+-> CandidateInputExample.txt is an example of input for the app
+-> CandidateOutputExample.txt is an example of output the app must generated given this candidateInputExample input
 
 Steps for running the app in CLI:
-* go into the root project ( rail-ticketing-system directory by default ) from CLI and do
+* go into the root project ( rail-ticketing-system directory by default ) from CLI and do:
 * mvn clean package && mvn clean compile assembly:single
 * java -cp target\rail-ticketing-system-1.0-SNAPSHOT.jar org.example.App {input_path_of_data_init} {output_path_generation}
   e.g ( java -cp target\rail-ticketing-system-1.0-SNAPSHOT.jar org.example.App C:\Users\eljar\Desktop\CandidateInputExample.txt C:\Users\eljar\Desktop\outputresults.json )
